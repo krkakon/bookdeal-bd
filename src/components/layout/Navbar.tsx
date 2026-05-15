@@ -25,12 +25,13 @@ const NAV_LINKS = [
     ]
   },
   {
-    label: 'Guides', bengali: 'নির্দেশিকা',
+    label: 'Guides', bengali: 'গাইড বই',
     children: [
-      { href: '/how-it-works', label: 'How it Works', bengali: 'কীভাবে কাজ করে' },
-      { href: '/how-it-works?tab=buy', label: 'How to Buy', bengali: 'কীভাবে কিনবেন' },
-      { href: '/how-it-works?tab=sell', label: 'How to Sell', bengali: 'কীভাবে বিক্রি করবেন' },
-      { href: '/faq', label: 'FAQ', bengali: 'সাধারণ প্রশ্ন' },
+      { href: '/guides', label: 'Browse All Guides', bengali: 'সব গাইড দেখুন' },
+      { href: '/guides?category=ssc', label: 'SSC Guides', bengali: 'এসএসসি গাইড' },
+      { href: '/guides?category=hsc', label: 'HSC Guides', bengali: 'এইচএসসি গাইড' },
+      { href: '/guides?category=admission', label: 'Admission Guides', bengali: 'ভর্তি গাইড' },
+      { href: '/guides?category=test-papers', label: 'Test Papers', bengali: 'টেস্ট পেপারস' },
     ]
   },
   { href: '/categories', label: 'Categories', bengali: 'বিভাগ' },
