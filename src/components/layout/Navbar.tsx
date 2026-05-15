@@ -31,6 +31,8 @@ const NAV_LINKS = [
       { href: '/books?category=guide&level=SSC', label: 'SSC Guides', bengali: 'এসএসসি গাইড' },
       { href: '/books?category=guide&level=HSC', label: 'HSC Guides', bengali: 'এইচএসসি গাইড' },
       { href: '/books?category=guide&level=Admission', label: 'Admission Guides', bengali: 'ভর্তি গাইড' },
+      { href: '/books?category=guide&level=1st+Year', label: 'Honours Guides', bengali: 'অনার্স গাইড' },
+      { href: '/books?category=guide&level=Masters', label: 'Masters Guides', bengali: 'মাস্টার্স গাইড' },
       { href: '/books?category=guide&subject=Test+Papers', label: 'Test Papers', bengali: 'টেস্ট পেপারস' },
     ]
   },

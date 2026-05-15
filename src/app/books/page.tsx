@@ -81,6 +81,15 @@ function BooksContent() {
   );
   const currentEdu = eduKey ? (BD_EDUCATION as Record<string, { label: string; levels: string[]; subjects: string[] }>)[eduKey] : null;
 
+  const isGuideCategory = selectedCategory === 'guide';
+  const availableLevels = isGuideCategory 
+    ? Array.from(new Set(Object.values(BD_EDUCATION).flatMap((e: any) => e.levels)))
+    : currentEdu?.levels || [];
+  
+  const availableSubjects = isGuideCategory
+    ? Array.from(new Set(Object.values(BD_EDUCATION).flatMap((e: any) => e.subjects)))
+    : currentEdu?.subjects || [];
+
   const filtered = useMemo(() => {
     let books = [...MOCK_BOOKS];
     if (search) books = books.filter(b => b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase()) || b.subject.toLowerCase().includes(search.toLowerCase()));
@@ -141,23 +150,23 @@ function BooksContent() {
                 </div>
 
                 {/* Education Level */}
-                {currentEdu && (
+                {(currentEdu || isGuideCategory) && (
                   <div>
                     <label className="input-label">Level / শ্রেণী</label>
                     <select className="input select" value={selectedLevel} onChange={e => setSelectedLevel(e.target.value)} id="filter-level">
                       <option value="">All Levels</option>
-                      {currentEdu.levels.map(l => <option key={l} value={l}>{l}</option>)}
+                      {availableLevels.map(l => <option key={l} value={l}>{l}</option>)}
                     </select>
                   </div>
                 )}
 
                 {/* Subject Filter */}
-                {currentEdu && (
+                {(currentEdu || isGuideCategory) && (
                   <div>
                     <label className="input-label">Subject / বিষয়</label>
                     <select className="input select" value={selectedSubject} onChange={e => setSelectedSubject(e.target.value)} id="filter-subject">
                       <option value="">All Subjects</option>
-                      {currentEdu.subjects.map(s => <option key={s} value={s}>{s}</option>)}
+                      {availableSubjects.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
                   </div>
                 )}
