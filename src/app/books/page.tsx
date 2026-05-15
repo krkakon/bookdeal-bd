@@ -2,6 +2,8 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { Search, Filter, ChevronDown, Heart, Star, Eye, MapPin, X, SlidersHorizontal } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -57,11 +59,17 @@ function BookCard({ book }: { book: Book }) {
   );
 }
 
-export default function BooksPage() {
-  const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedLevel, setSelectedLevel] = useState('');
-  const [selectedSubject, setSelectedSubject] = useState('');
+function BooksContent() {
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get('category') || '';
+  const initialLevel = searchParams.get('level') || '';
+  const initialSubject = searchParams.get('subject') || '';
+  const initialSearch = searchParams.get('search') || '';
+
+  const [search, setSearch] = useState(initialSearch);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedLevel, setSelectedLevel] = useState(initialLevel);
+  const [selectedSubject, setSelectedSubject] = useState(initialSubject);
   const [selectedCondition, setSelectedCondition] = useState('');
   const [priceMin, setPriceMin] = useState('');
   const [priceMax, setPriceMax] = useState('');
@@ -77,6 +85,8 @@ export default function BooksPage() {
     let books = [...MOCK_BOOKS];
     if (search) books = books.filter(b => b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase()) || b.subject.toLowerCase().includes(search.toLowerCase()));
     if (selectedCategory) books = books.filter(b => b.category === selectedCategory);
+    if (selectedLevel) books = books.filter(b => b.level?.toLowerCase().includes(selectedLevel.toLowerCase()));
+    if (selectedSubject) books = books.filter(b => b.subject?.toLowerCase().includes(selectedSubject.toLowerCase()));
     if (selectedCondition) books = books.filter(b => b.condition === selectedCondition);
     if (priceMin) books = books.filter(b => b.price >= Number(priceMin));
     if (priceMax) books = books.filter(b => b.price <= Number(priceMax));
@@ -204,5 +214,13 @@ export default function BooksPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function BooksPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BooksContent />
+    </Suspense>
   );
 }

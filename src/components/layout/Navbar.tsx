@@ -27,11 +27,11 @@ const NAV_LINKS = [
   {
     label: 'Guides', bengali: 'গাইড বই',
     children: [
-      { href: '/guides', label: 'Browse All Guides', bengali: 'সব গাইড দেখুন' },
-      { href: '/guides?category=ssc', label: 'SSC Guides', bengali: 'এসএসসি গাইড' },
-      { href: '/guides?category=hsc', label: 'HSC Guides', bengali: 'এইচএসসি গাইড' },
-      { href: '/guides?category=admission', label: 'Admission Guides', bengali: 'ভর্তি গাইড' },
-      { href: '/guides?category=test-papers', label: 'Test Papers', bengali: 'টেস্ট পেপারস' },
+      { href: '/books?category=guide', label: 'Browse All Guides', bengali: 'সব গাইড দেখুন' },
+      { href: '/books?category=guide&level=SSC', label: 'SSC Guides', bengali: 'এসএসসি গাইড' },
+      { href: '/books?category=guide&level=HSC', label: 'HSC Guides', bengali: 'এইচএসসি গাইড' },
+      { href: '/books?category=guide&level=Admission', label: 'Admission Guides', bengali: 'ভর্তি গাইড' },
+      { href: '/books?category=guide&subject=Test+Papers', label: 'Test Papers', bengali: 'টেস্ট পেপারস' },
     ]
   },
   { href: '/categories', label: 'Categories', bengali: 'বিভাগ' },
