@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BookOpen, ShoppingCart, User, Search, Menu, X,
-  ChevronDown, Bell, Heart, LogOut, LayoutDashboard,
+  ChevronDown, ChevronRight, Bell, Heart, LogOut, LayoutDashboard,
   BookMarked, Settings, Shield
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -21,7 +21,13 @@ const NAV_LINKS = [
       { href: '/books?category=ssc', label: 'SSC Books', bengali: 'এসএসসি বই' },
       { href: '/books?category=hsc', label: 'HSC Books', bengali: 'এইচএসসি বই' },
       { href: '/books?category=admission', label: 'Admission Prep', bengali: 'ভর্তি পরীক্ষা' },
-      { href: '/books?category=bachelor', label: 'University Books', bengali: 'বিশ্ববিদ্যালয়' },
+      { 
+        href: '/books?category=bachelor', label: 'University Books', bengali: 'বিশ্ববিদ্যালয়',
+        subChildren: [
+          { href: '/books?category=bachelor', label: 'Honours/Bachelors', bengali: 'অনার্স' },
+          { href: '/books?category=masters', label: 'Masters', bengali: 'মাস্টার্স' }
+        ]
+      },
     ]
   },
   {
@@ -45,6 +51,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [openSubDropdown, setOpenSubDropdown] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const pathname = usePathname();
@@ -139,16 +146,54 @@ export default function Navbar() {
                           zIndex: 200,
                         }}>
                         {link.children.map((child) => (
-                          <Link key={child.href} href={child.href} style={{
-                            display: 'flex', flexDirection: 'column', padding: '10px 14px',
-                            borderRadius: 'var(--radius-sm)', textDecoration: 'none',
-                            transition: 'background 0.2s',
-                          }}
-                            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(14,165,233,0.1)')}
-                            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                            <span style={{ color: 'var(--color-text)', fontWeight: 500, fontSize: '0.875rem' }}>{child.label}</span>
-                            <span style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', fontFamily: 'Hind Siliguri' }}>{child.bengali}</span>
-                          </Link>
+                          <div key={child.label} style={{ position: 'relative' }}
+                            onMouseEnter={() => child.subChildren && setOpenSubDropdown(child.label)}
+                            onMouseLeave={() => setOpenSubDropdown(null)}>
+                            <Link href={child.href || '#'} style={{
+                              display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px',
+                              borderRadius: 'var(--radius-sm)', textDecoration: 'none',
+                              transition: 'background 0.2s',
+                            }}
+                              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(14,165,233,0.1)')}
+                              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+                              <div>
+                                <div style={{ color: 'var(--color-text)', fontWeight: 500, fontSize: '0.875rem' }}>{child.label}</div>
+                                <div style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', fontFamily: 'Hind Siliguri' }}>{child.bengali}</div>
+                              </div>
+                              {child.subChildren && <ChevronRight size={14} style={{ color: 'var(--color-text-muted)' }} />}
+                            </Link>
+
+                            {/* Sub-dropdown */}
+                            <AnimatePresence>
+                              {child.subChildren && openSubDropdown === child.label && (
+                                <motion.div
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -10 }}
+                                  transition={{ duration: 0.18 }}
+                                  style={{
+                                    position: 'absolute', top: 0, left: '100%', width: 200,
+                                    background: 'rgba(10,15,30,0.95)', backdropFilter: 'blur(20px)',
+                                    border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-lg)',
+                                    padding: '8px', marginLeft: 4,
+                                    boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
+                                  }}>
+                                  {child.subChildren.map(sub => (
+                                    <Link key={sub.href} href={sub.href} style={{
+                                      display: 'flex', flexDirection: 'column', padding: '10px 14px',
+                                      borderRadius: 'var(--radius-sm)', textDecoration: 'none',
+                                      transition: 'background 0.2s',
+                                    }}
+                                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(14,165,233,0.1)')}
+                                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+                                      <span style={{ color: 'var(--color-text)', fontWeight: 500, fontSize: '0.875rem' }}>{sub.label}</span>
+                                      <span style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', fontFamily: 'Hind Siliguri' }}>{sub.bengali}</span>
+                                    </Link>
+                                  ))}
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
                         ))}
                       </motion.div>
                     )}
@@ -284,9 +329,16 @@ export default function Navbar() {
                       <>
                         <div style={{ padding: '10px 16px', color: 'var(--color-text-muted)', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 8 }}>{link.label}</div>
                         {link.children?.map(child => (
-                          <Link key={child.href} href={child.href} style={{ display: 'block', padding: '10px 28px', borderRadius: 'var(--radius-sm)', color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                            {child.label}
-                          </Link>
+                          <div key={child.label}>
+                            <Link href={child.href || '#'} style={{ display: 'block', padding: '10px 28px', borderRadius: 'var(--radius-sm)', color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>
+                              {child.label}
+                            </Link>
+                            {child.subChildren?.map(sub => (
+                              <Link key={sub.href} href={sub.href} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 40px', borderRadius: 'var(--radius-sm)', color: 'var(--color-text-dim)', textDecoration: 'none', fontSize: '0.85rem' }}>
+                                <ChevronRight size={12} /> {sub.label}
+                              </Link>
+                            ))}
+                          </div>
                         ))}
                       </>
                     )}
