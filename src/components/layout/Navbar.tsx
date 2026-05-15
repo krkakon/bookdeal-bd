@@ -11,6 +11,7 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { useSite } from '@/context/SiteContext';
+import { ThemeToggle } from './ThemeToggle';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home', bengali: 'হোম' },
@@ -210,6 +211,9 @@ export default function Navbar() {
                 style={{ padding: '8px', borderRadius: 'var(--radius-sm)', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer' }}>
                 <Search size={18} />
               </motion.button>
+
+              {/* Theme Toggle */}
+              <ThemeToggle />
 
               {/* Cart */}
               <Link href="/cart" style={{ position: 'relative', padding: '8px', borderRadius: 'var(--radius-sm)', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', display: 'flex' }}>
