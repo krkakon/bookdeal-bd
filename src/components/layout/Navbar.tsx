@@ -25,7 +25,7 @@ const NAV_LINKS = [
     ]
   },
   {
-    label: 'Guide', bengali: 'নির্দেশিকা',
+    label: 'Guides', bengali: 'নির্দেশিকা',
     children: [
       { href: '/how-it-works', label: 'How it Works', bengali: 'কীভাবে কাজ করে' },
       { href: '/how-it-works?tab=buy', label: 'How to Buy', bengali: 'কীভাবে কিনবেন' },
