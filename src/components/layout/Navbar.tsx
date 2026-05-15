@@ -59,8 +59,13 @@ export default function Navbar() {
   const { totalItems } = useCart();
   const { settings } = useSite();
 
+  const [scrollTop, setScrollTop] = useState(0);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      setScrollTop(window.scrollY);
+    };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -68,6 +73,10 @@ export default function Navbar() {
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   const handleLogout = async () => { await logout(); };
+
+  // Calculate dynamic top to prevent gap during scroll
+  const bannerHeight = 44; // Estimated height based on padding/font
+  const navTop = settings.announcementBanner ? Math.max(0, bannerHeight - scrollTop) : 0;
 
   return (
     <>
@@ -83,7 +92,7 @@ export default function Navbar() {
         </div>
       )}
 
-      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} style={{ top: settings.announcementBanner ? '40px' : 0 }}>
+      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} style={{ top: navTop }}>
         <div className="container">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
 
