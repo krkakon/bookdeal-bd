@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, BookOpen, Camera } from 'lucide-react';
+import { Upload, BookOpen, Camera, X } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { BD_EDUCATION, BOOK_CATEGORIES, BOOK_CONDITIONS } from '@/lib/constants';
 
@@ -10,9 +10,12 @@ export default function SellPage() {
   const [form, setForm] = useState({
     title: '', author: '', category: '', level: '', subject: '',
     publisher: '', edition: '', condition: '', price: '', description: '',
+    imageUrl: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const eduKey = Object.keys(BD_EDUCATION).find(k =>
     BOOK_CATEGORIES.find(c => c.id === form.category)?.label.toLowerCase().includes(
@@ -24,9 +27,39 @@ export default function SellPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    // Include form.imageUrl in the submitted data
+    console.log("Submitting:", form);
     await new Promise(r => setTimeout(r, 1500));
     setSubmitted(true);
     setLoading(false);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error('Upload failed');
+      
+      const data = await res.json();
+      setForm(prev => ({ ...prev, imageUrl: data.url }));
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploadingImage(false);
+      // Reset input
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   if (!userProfile?.isSeller) {
@@ -137,16 +170,43 @@ export default function SellPage() {
         {/* Photo Upload */}
         <div className="glass-card" style={{ padding: 28, marginBottom: 24 }}>
           <h3 style={{ fontWeight: 700, marginBottom: 20, color: 'var(--color-primary)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Book Photos / ছবি</h3>
-          <div style={{ border: '2px dashed var(--glass-border)', borderRadius: 'var(--radius-lg)', padding: '40px 20px', textAlign: 'center', cursor: 'pointer' }}
-            onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--color-primary)'}
-            onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--glass-border)'}>
-            <Camera size={32} style={{ color: 'var(--color-primary)', marginBottom: 12 }} />
-            <p style={{ fontWeight: 600, marginBottom: 4 }}>Click to upload photos</p>
-            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>ছবি আপলোড করুন (JPG, PNG — max 5MB)</p>
-            <button type="button" className="btn btn-glass btn-sm" style={{ marginTop: 12, gap: 8 }}>
-              <Upload size={14} /> Choose Photos
-            </button>
-          </div>
+          
+          <input 
+            type="file" 
+            accept="image/jpeg, image/png" 
+            style={{ display: 'none' }} 
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+          />
+
+          {form.imageUrl ? (
+            <div style={{ position: 'relative', width: '100%', maxWidth: 300, margin: '0 auto', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={form.imageUrl} alt="Book Preview" style={{ width: '100%', display: 'block', aspectRatio: '4/3', objectFit: 'cover' }} />
+              <button 
+                type="button"
+                onClick={() => setForm({ ...form, imageUrl: '' })}
+                style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ) : (
+            <div 
+              style={{ border: '2px dashed var(--glass-border)', borderRadius: 'var(--radius-lg)', padding: '40px 20px', textAlign: 'center', cursor: uploadingImage ? 'wait' : 'pointer', opacity: uploadingImage ? 0.6 : 1 }}
+              onClick={() => !uploadingImage && fileInputRef.current?.click()}
+              onMouseEnter={e => !uploadingImage && ((e.currentTarget as HTMLDivElement).style.borderColor = 'var(--color-primary)')}
+              onMouseLeave={e => !uploadingImage && ((e.currentTarget as HTMLDivElement).style.borderColor = 'var(--glass-border)')}
+            >
+              <Camera size={32} style={{ color: 'var(--color-primary)', marginBottom: 12 }} />
+              <p style={{ fontWeight: 600, marginBottom: 4 }}>{uploadingImage ? 'Uploading...' : 'Click to upload photos'}</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>ছবি আপলোড করুন (JPG, PNG — max 5MB)</p>
+              <button type="button" className="btn btn-glass btn-sm" style={{ marginTop: 12, gap: 8 }} disabled={uploadingImage}>
+                {uploadingImage ? <div className="spinner" style={{ width: 14, height: 14 }} /> : <Upload size={14} />} 
+                {uploadingImage ? 'Uploading' : 'Choose Photos'}
+              </button>
+            </div>
+          )}
         </div>
 
         <button type="submit" className="btn btn-primary btn-xl" style={{ width: '100%', gap: 10 }} disabled={loading} id="sell-submit">

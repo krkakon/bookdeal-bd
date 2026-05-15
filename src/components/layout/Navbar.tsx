@@ -24,6 +24,15 @@ const NAV_LINKS = [
       { href: '/books?category=bachelor', label: 'University Books', bengali: 'বিশ্ববিদ্যালয়' },
     ]
   },
+  {
+    label: 'Guide', bengali: 'নির্দেশিকা',
+    children: [
+      { href: '/how-it-works', label: 'How it Works', bengali: 'কীভাবে কাজ করে' },
+      { href: '/how-it-works?tab=buy', label: 'How to Buy', bengali: 'কীভাবে কিনবেন' },
+      { href: '/how-it-works?tab=sell', label: 'How to Sell', bengali: 'কীভাবে বিক্রি করবেন' },
+      { href: '/faq', label: 'FAQ', bengali: 'সাধারণ প্রশ্ন' },
+    ]
+  },
   { href: '/categories', label: 'Categories', bengali: 'বিভাগ' },
   { href: '/about', label: 'About', bengali: 'আমাদের সম্পর্কে' },
   { href: '/contact', label: 'Contact', bengali: 'যোগাযোগ' },
