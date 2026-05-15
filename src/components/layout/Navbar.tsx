@@ -74,8 +74,13 @@ export default function Navbar() {
     <>
       {/* Announcement Banner */}
       {settings.announcementBanner && (
-        <div className="announcement-bar" style={{ fontSize: '0.82rem' }}>
-          {settings.announcementBanner}
+        <div className="announcement-bar">
+          <motion.div
+            animate={{ scale: [1, 1.02, 1] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {settings.announcementBanner}
+          </motion.div>
         </div>
       )}
 
