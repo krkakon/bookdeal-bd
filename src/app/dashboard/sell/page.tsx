@@ -5,6 +5,8 @@ import { Upload, BookOpen, Camera, X } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { BD_EDUCATION, BOOK_CATEGORIES, BOOK_CONDITIONS } from '@/lib/constants';
 
+import { CustomSelect } from '@/components/ui/CustomSelect';
+
 export default function SellPage() {
   const { userProfile, enableSelling } = useAuth();
   const [form, setForm] = useState({
@@ -23,6 +25,15 @@ export default function SellPage() {
     )
   );
   const currentEdu = eduKey ? (BD_EDUCATION as Record<string, { label: string; levels: string[]; subjects: string[] }>)[eduKey] : null;
+
+  const isGuideCategory = form.category === 'guide';
+  const availableLevels = isGuideCategory 
+    ? Array.from(new Set(Object.values(BD_EDUCATION).flatMap((e: any) => e.levels)))
+    : currentEdu?.levels || [];
+  
+  const availableSubjects = isGuideCategory
+    ? Array.from(new Set(Object.values(BD_EDUCATION).flatMap((e: any) => e.subjects)))
+    : currentEdu?.subjects || [];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,31 +126,40 @@ export default function SellPage() {
               <input className="input" placeholder="e.g. Panjeree" value={form.publisher} onChange={e => setForm({ ...form, publisher: e.target.value })} />
             </div>
             <div>
-              <label className="input-label">Category / বিভাগ *</label>
-              <select className="input select" required value={form.category} onChange={e => setForm({ ...form, category: e.target.value, level: '', subject: '' })} id="sell-category">
-                <option value="">Select Category</option>
-                {BOOK_CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label} — {c.bengali}</option>)}
-              </select>
+              <CustomSelect 
+                label="Category / বিভাগ"
+                required
+                value={form.category}
+                onChange={v => setForm({ ...form, category: v, level: '', subject: '' })}
+                options={BOOK_CATEGORIES.map(c => ({ value: c.id, label: c.label, bengali: c.bengali }))}
+                placeholder="Select Category"
+              />
             </div>
             <div>
               <label className="input-label">Edition / সংস্করণ</label>
               <input className="input" placeholder="e.g. 2024" value={form.edition} onChange={e => setForm({ ...form, edition: e.target.value })} />
             </div>
-            {currentEdu && (
+            {(currentEdu || isGuideCategory) && (
               <>
                 <div>
-                  <label className="input-label">Level / শ্রেণী *</label>
-                  <select className="input select" value={form.level} onChange={e => setForm({ ...form, level: e.target.value })} id="sell-level">
-                    <option value="">Select Level</option>
-                    {currentEdu.levels.map(l => <option key={l} value={l}>{l}</option>)}
-                  </select>
+                  <CustomSelect 
+                    label="Level / শ্রেণী"
+                    required
+                    value={form.level}
+                    onChange={v => setForm({ ...form, level: v })}
+                    options={availableLevels.map(l => ({ value: l, label: l }))}
+                    placeholder="Select Level"
+                  />
                 </div>
                 <div>
-                  <label className="input-label">Subject / বিষয় *</label>
-                  <select className="input select" value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} id="sell-subject">
-                    <option value="">Select Subject</option>
-                    {currentEdu.subjects.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
+                  <CustomSelect 
+                    label="Subject / বিষয়"
+                    required
+                    value={form.subject}
+                    onChange={v => setForm({ ...form, subject: v })}
+                    options={availableSubjects.map(s => ({ value: s, label: s }))}
+                    placeholder="Select Subject"
+                  />
                 </div>
               </>
             )}
@@ -150,11 +170,14 @@ export default function SellPage() {
           <h3 style={{ fontWeight: 700, marginBottom: 20, color: 'var(--color-primary)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Condition & Price</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div>
-              <label className="input-label">Book Condition / অবস্থা *</label>
-              <select className="input select" required value={form.condition} onChange={e => setForm({ ...form, condition: e.target.value })} id="sell-condition">
-                <option value="">Select Condition</option>
-                {BOOK_CONDITIONS.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-              </select>
+              <CustomSelect 
+                label="Book Condition / অবস্থা"
+                required
+                value={form.condition}
+                onChange={v => setForm({ ...form, condition: v })}
+                options={BOOK_CONDITIONS.map(c => ({ value: c.value, label: c.label }))}
+                placeholder="Select Condition"
+              />
             </div>
             <div>
               <label className="input-label">Selling Price / বিক্রয় মূল্য (৳) *</label>

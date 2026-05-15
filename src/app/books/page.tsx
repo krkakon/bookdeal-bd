@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { Search, Filter, ChevronDown, Heart, Star, Eye, MapPin, X, SlidersHorizontal } from 'lucide-react';
@@ -10,6 +10,8 @@ import Footer from '@/components/layout/Footer';
 import { MOCK_BOOKS, Book } from '@/data/mockBooks';
 import { BD_EDUCATION, BOOK_CATEGORIES, BOOK_CONDITIONS } from '@/lib/constants';
 import { useCart } from '@/context/CartContext';
+
+import { CustomSelect } from '@/components/ui/CustomSelect';
 
 function BookCard({ book }: { book: Book }) {
   const { addItem } = useCart();
@@ -124,12 +126,19 @@ function BooksContent() {
               <input className="input" style={{ paddingLeft: 42 }} placeholder="Search books, subjects, authors..."
                 value={search} onChange={e => setSearch(e.target.value)} id="books-search" />
             </div>
-            <select className="input select" style={{ width: 180 }} value={sortBy} onChange={e => setSortBy(e.target.value)} id="books-sort">
-              <option value="newest">Newest First</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="popular">Most Popular</option>
-            </select>
+            <div style={{ width: 220 }}>
+              <CustomSelect 
+                value={sortBy} 
+                onChange={setSortBy} 
+                options={[
+                  { value: 'newest', label: 'Newest First' },
+                  { value: 'price-asc', label: 'Price: Low to High' },
+                  { value: 'price-desc', label: 'Price: High to Low' },
+                  { value: 'popular', label: 'Most Popular' },
+                ]} 
+                placeholder="Sort By" 
+              />
+            </div>
             <button className="btn btn-glass" onClick={() => setFilterOpen(!filterOpen)} style={{ gap: 8 }} id="filter-toggle">
               <SlidersHorizontal size={16} /> Filters {filterOpen ? <X size={14} /> : <ChevronDown size={14} />}
             </button>
@@ -142,42 +151,50 @@ function BooksContent() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
                 {/* Category Filter */}
                 <div>
-                  <label className="input-label">Category / বিভাগ</label>
-                  <select className="input select" value={selectedCategory} onChange={e => { setSelectedCategory(e.target.value); setSelectedLevel(''); setSelectedSubject(''); }} id="filter-category">
-                    <option value="">All Categories</option>
-                    {BOOK_CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label} — {c.bengali}</option>)}
-                  </select>
+                  <CustomSelect 
+                    label="Category / বিভাগ"
+                    value={selectedCategory} 
+                    onChange={v => { setSelectedCategory(v); setSelectedLevel(''); setSelectedSubject(''); }}
+                    options={BOOK_CATEGORIES.map(c => ({ value: c.id, label: c.label, bengali: c.bengali }))}
+                    placeholder="All Categories"
+                  />
                 </div>
 
                 {/* Education Level */}
                 {(currentEdu || isGuideCategory) && (
                   <div>
-                    <label className="input-label">Level / শ্রেণী</label>
-                    <select className="input select" value={selectedLevel} onChange={e => setSelectedLevel(e.target.value)} id="filter-level">
-                      <option value="">All Levels</option>
-                      {availableLevels.map(l => <option key={l} value={l}>{l}</option>)}
-                    </select>
+                    <CustomSelect 
+                      label="Level / শ্রেণী"
+                      value={selectedLevel} 
+                      onChange={setSelectedLevel}
+                      options={availableLevels.map(l => ({ value: l, label: l }))}
+                      placeholder="All Levels"
+                    />
                   </div>
                 )}
 
                 {/* Subject Filter */}
                 {(currentEdu || isGuideCategory) && (
                   <div>
-                    <label className="input-label">Subject / বিষয়</label>
-                    <select className="input select" value={selectedSubject} onChange={e => setSelectedSubject(e.target.value)} id="filter-subject">
-                      <option value="">All Subjects</option>
-                      {availableSubjects.map(s => <option key={s} value={s}>{s}</option>)}
-                    </select>
+                    <CustomSelect 
+                      label="Subject / বিষয়"
+                      value={selectedSubject} 
+                      onChange={setSelectedSubject}
+                      options={availableSubjects.map(s => ({ value: s, label: s }))}
+                      placeholder="All Subjects"
+                    />
                   </div>
                 )}
 
                 {/* Condition */}
                 <div>
-                  <label className="input-label">Condition / অবস্থা</label>
-                  <select className="input select" value={selectedCondition} onChange={e => setSelectedCondition(e.target.value)} id="filter-condition">
-                    <option value="">Any Condition</option>
-                    {BOOK_CONDITIONS.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-                  </select>
+                  <CustomSelect 
+                    label="Condition / অবস্থা"
+                    value={selectedCondition} 
+                    onChange={setSelectedCondition}
+                    options={BOOK_CONDITIONS.map(c => ({ value: c.value, label: c.label }))}
+                    placeholder="Any Condition"
+                  />
                 </div>
 
                 {/* Price Range */}
@@ -196,9 +213,24 @@ function BooksContent() {
 
               {/* Active Filters */}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 16 }}>
-                {selectedCategory && <span className="badge badge-primary">{selectedCategory} <button onClick={() => setSelectedCategory('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', marginLeft: 4 }}>×</button></span>}
-                {selectedCondition && <span className="badge badge-success">{selectedCondition} <button onClick={() => setSelectedCondition('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', marginLeft: 4 }}>×</button></span>}
-                {(priceMin || priceMax) && <span className="badge badge-warning">৳{priceMin || '0'} - ৳{priceMax || '∞'} <button onClick={() => { setPriceMin(''); setPriceMax(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', marginLeft: 4 }}>×</button></span>}
+                {selectedCategory && (
+                  <span className="badge badge-primary">
+                    {BOOK_CATEGORIES.find(c => c.id === selectedCategory)?.label || selectedCategory}
+                    <button onClick={() => setSelectedCategory('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', marginLeft: 6 }}>×</button>
+                  </span>
+                )}
+                {selectedCondition && (
+                  <span className="badge badge-success">
+                    {BOOK_CONDITIONS.find(c => c.value === selectedCondition)?.label || selectedCondition}
+                    <button onClick={() => setSelectedCondition('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', marginLeft: 6 }}>×</button>
+                  </span>
+                )}
+                {(priceMin || priceMax) && (
+                  <span className="badge badge-warning">
+                    ৳{priceMin || '0'} - ৳{priceMax || '∞'} 
+                    <button onClick={() => { setPriceMin(''); setPriceMax(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', marginLeft: 6 }}>×</button>
+                  </span>
+                )}
               </div>
             </motion.div>
           )}
