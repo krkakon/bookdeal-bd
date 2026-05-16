@@ -59,6 +59,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+select option {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
 /* ==================== MESH GRADIENT BACKGROUND ==================== */
 .bg-mesh {
   position: fixed;
