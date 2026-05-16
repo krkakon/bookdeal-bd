@@ -29,7 +29,7 @@ export default function AdminCustomizationPage() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: 4 }}>Site Customization</h1>
-          <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri' }}>ওয়েবসাইটের সব কিছু এখান থেকে পরিবর্তন করুন</p>
+          <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)' }}>ওয়েবসাইটের সব কিছু এখান থেকে পরিবর্তন করুন</p>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
           <button onClick={resetSettings} className="btn btn-glass btn-sm" style={{ gap: 6 }}>
@@ -74,7 +74,7 @@ export default function AdminCustomizationPage() {
                 </div>
                 <div>
                   <label className="input-label">Tagline (Bengali / বাংলা)</label>
-                  <input className="input" style={{ fontFamily: 'Hind Siliguri' }} value={form.taglineBengali} onChange={e => setForm({ ...form, taglineBengali: e.target.value })} />
+                  <input className="input" style={{ fontFamily: 'var(--font-bengali)' }} value={form.taglineBengali} onChange={e => setForm({ ...form, taglineBengali: e.target.value })} />
                 </div>
                 <div>
                   <label className="input-label">Footer Text</label>
@@ -94,7 +94,7 @@ export default function AdminCustomizationPage() {
                 </div>
                 <div style={{ gridColumn: '1 / -1' }}>
                   <label className="input-label">Hero Title (Bengali / বাংলা)</label>
-                  <input className="input" style={{ fontFamily: 'Hind Siliguri' }} value={form.heroBengali} onChange={e => setForm({ ...form, heroBengali: e.target.value })} />
+                  <input className="input" style={{ fontFamily: 'var(--font-bengali)' }} value={form.heroBengali} onChange={e => setForm({ ...form, heroBengali: e.target.value })} />
                 </div>
                 <div style={{ gridColumn: '1 / -1' }}>
                   <label className="input-label">Hero Subtitle</label>

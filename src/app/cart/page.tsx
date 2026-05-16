@@ -6,6 +6,7 @@ import { ShoppingCart, Trash2, ArrowRight, Tag, CheckCircle, CreditCard, Smartph
 import { useCart } from '@/context/CartContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import Image from 'next/image';
 
 export default function CartPage() {
   const { items, removeItem, clearCart, totalPrice, appliedVoucher, discount, applyVoucher, removeVoucher } = useCart();
@@ -40,7 +41,7 @@ export default function CartPage() {
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={{ textAlign: 'center', maxWidth: 460 }}>
           <div style={{ fontSize: '5rem', marginBottom: 20 }}>🎉</div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-success)', marginBottom: 10 }}>Order Placed!</h1>
-          <p style={{ fontFamily: 'Hind Siliguri', color: 'var(--color-text-muted)', marginBottom: 8 }}>আপনার অর্ডার সফলভাবে দেওয়া হয়েছে!</p>
+          <p style={{ fontFamily: 'var(--font-bengali)', color: 'var(--color-text-muted)', marginBottom: 8 }}>আপনার অর্ডার সফলভাবে দেওয়া হয়েছে!</p>
           <p style={{ color: 'var(--color-text-muted)', marginBottom: 28, fontSize: '0.9rem' }}>Track your order from your dashboard.</p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
             <Link href="/dashboard/orders" className="btn btn-primary btn-lg">Track Order</Link>
@@ -64,7 +65,7 @@ export default function CartPage() {
             <div style={{ textAlign: 'center', padding: '80px 20px' }}>
               <ShoppingCart size={64} style={{ color: 'var(--color-text-dim)', marginBottom: 20 }} />
               <p style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: 8 }}>Your cart is empty</p>
-              <p style={{ fontFamily: 'Hind Siliguri', color: 'var(--color-text-muted)', marginBottom: 24 }}>আপনার কার্ট খালি। বই যোগ করুন!</p>
+              <p style={{ fontFamily: 'var(--font-bengali)', color: 'var(--color-text-muted)', marginBottom: 24 }}>আপনার কার্ট খালি। বই যোগ করুন!</p>
               <Link href="/books" className="btn btn-primary btn-lg">Browse Books</Link>
             </div>
           ) : (
@@ -74,7 +75,9 @@ export default function CartPage() {
                 {items.map((item, i) => (
                   <motion.div key={item.bookId} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
                     <div className="glass-card" style={{ padding: 0, display: 'flex', gap: 0, overflow: 'hidden' }}>
-                      <img src={item.image} alt={item.title} style={{ width: 110, height: 100, objectFit: 'cover', flexShrink: 0 }} />
+                      <div style={{ position: 'relative', width: 110, height: 100, flexShrink: 0 }}>
+                        <Image src={item.image} alt={item.title} fill style={{ objectFit: 'cover' }} />
+                      </div>
                       <div style={{ padding: '14px 16px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
                         <div>
                           <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: 4 }}>{item.title}</div>

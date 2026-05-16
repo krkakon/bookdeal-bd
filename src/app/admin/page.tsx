@@ -42,7 +42,7 @@ export default function AdminDashboard() {
       {/* Welcome */}
       <div style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.12), rgba(239,68,68,0.08))', border: '1px solid rgba(245,158,11,0.2)', borderRadius: 'var(--radius-xl)', padding: '24px 28px' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4 }}>Admin Dashboard 📊</h1>
-        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri' }}>BookDeal BD প্ল্যাটফর্মের সম্পূর্ণ নিয়ন্ত্রণ</p>
+        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)' }}>BookDeal BD প্ল্যাটফর্মের সম্পূর্ণ নিয়ন্ত্রণ</p>
       </div>
 
       {/* Pending Alerts */}

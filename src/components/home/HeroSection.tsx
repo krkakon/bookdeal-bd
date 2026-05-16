@@ -1,9 +1,11 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, ArrowRight, Star, Shield, Zap, BookOpen, Users, TrendingUp, ChevronDown } from 'lucide-react';
 import { useSite } from '@/context/SiteContext';
+import { BOOK_CATEGORIES } from '@/lib/constants';
 
 const STATS = [
   { icon: <BookOpen size={20} />, value: '15,000+', label: 'Books Listed', bengali: 'বই তালিকাভুক্ত' },
@@ -22,6 +24,9 @@ const FLOATING_BOOKS = [
 
 export default function HeroSection() {
   const { settings } = useSite();
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchCategory, setSearchCategory] = useState('');
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref });
   const y = useTransform(scrollYProgress, [0, 1], [0, -80]);
@@ -80,7 +85,7 @@ export default function HeroSection() {
           </motion.h1>
 
           {/* Bengali Headline */}
-          <motion.div variants={itemVariants} style={{ fontFamily: 'Hind Siliguri, sans-serif', fontSize: 'clamp(1rem, 3vw, 1.4rem)', color: 'var(--color-text-muted)', marginBottom: 20, fontWeight: 400 }}>
+          <motion.div variants={itemVariants} style={{ fontFamily: 'var(--font-bengali), sans-serif', fontSize: 'clamp(1rem, 3vw, 1.4rem)', color: 'var(--color-text-muted)', marginBottom: 20, fontWeight: 400 }}>
             {settings.heroBengali}
           </motion.div>
 
@@ -90,8 +95,25 @@ export default function HeroSection() {
           </motion.p>
 
           {/* Search Bar */}
-          <motion.div variants={itemVariants} style={{ maxWidth: 620, margin: '0 auto 40px' }}>
+          <motion.div variants={itemVariants} style={{ maxWidth: 720, margin: '0 auto 40px' }}>
             <div className="glass" style={{ padding: '6px', display: 'flex', gap: 8, borderRadius: 'var(--radius-xl)' }}>
+              
+              {/* Category Dropdown */}
+              <div style={{ position: 'relative', minWidth: '150px' }}>
+                <select
+                  className="input"
+                  style={{ border: 'none', background: 'var(--glass-bg)', borderRadius: 'var(--radius-lg)', cursor: 'pointer', appearance: 'none', paddingRight: '32px' }}
+                  value={searchCategory}
+                  onChange={(e) => setSearchCategory(e.target.value)}
+                >
+                  <option value="">All Categories</option>
+                  {BOOK_CATEGORIES.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.label}</option>
+                  ))}
+                </select>
+                <ChevronDown size={16} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-dim)', pointerEvents: 'none' }} />
+              </div>
+
               <div style={{ flex: 1, position: 'relative' }}>
                 <Search size={18} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-dim)' }} />
                 <input
@@ -99,9 +121,16 @@ export default function HeroSection() {
                   placeholder="Search SSC Physics, HSC Chemistry... / বই খুঁজুন"
                   style={{ paddingLeft: 44, border: 'none', background: 'transparent', borderRadius: 'var(--radius-lg)' }}
                   id="hero-search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      router.push(`/books?search=${encodeURIComponent(searchQuery)}${searchCategory ? `&category=${searchCategory}` : ''}`);
+                    }
+                  }}
                 />
               </div>
-              <Link href="/books" className="btn btn-primary" style={{ borderRadius: 'var(--radius-lg)', gap: 8, flexShrink: 0 }}>
+              <Link href={`/books?search=${encodeURIComponent(searchQuery)}${searchCategory ? `&category=${searchCategory}` : ''}`} className="btn btn-primary" style={{ borderRadius: 'var(--radius-lg)', gap: 8, flexShrink: 0 }}>
                 Search <ArrowRight size={16} />
               </Link>
             </div>
@@ -147,7 +176,7 @@ export default function HeroSection() {
                   <div style={{ color: 'var(--color-primary)', marginBottom: 8, display: 'flex', justifyContent: 'center' }}>{stat.icon}</div>
                   <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--color-text)', lineHeight: 1 }}>{stat.value}</div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: 4 }}>{stat.label}</div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>{stat.bengali}</div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)' }}>{stat.bengali}</div>
                 </motion.div>
               ))}
             </div>

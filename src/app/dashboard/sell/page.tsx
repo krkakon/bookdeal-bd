@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, BookOpen, Camera, X } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { storage, db } from '@/lib/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { BD_EDUCATION, BOOK_CATEGORIES, BOOK_CONDITIONS } from '@/lib/constants';
+import Image from 'next/image';
 
 import { CustomSelect } from '@/components/ui/CustomSelect';
 
@@ -37,38 +41,60 @@ export default function SellPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.imageUrl) {
+      alert('Please upload at least one photo of the book.');
+      return;
+    }
+
     setLoading(true);
-    // Include form.imageUrl in the submitted data
-    console.log("Submitting:", form);
-    await new Promise(r => setTimeout(r, 1500));
-    setSubmitted(true);
-    setLoading(false);
+    try {
+      const bookData = {
+        ...form,
+        price: Number(form.price),
+        sellerId: userProfile?.uid,
+        sellerName: userProfile?.displayName,
+        sellerLocation: userProfile?.division || 'Dhaka',
+        sellerRating: userProfile?.rating || 5,
+        createdAt: serverTimestamp(),
+        views: 0,
+        wishlistCount: 0,
+        sold: false,
+        featured: false,
+        images: [form.imageUrl], // For now support one image
+      };
+
+      await addDoc(collection(db, 'books'), bookData);
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Error listing book:', error);
+      alert('Failed to list book. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file || !userProfile) return;
+
+    // Validation
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size too large. Maximum 5MB allowed.');
+      return;
+    }
 
     setUploadingImage(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error('Upload failed');
+      const storageRef = ref(storage, `books/${userProfile.uid}/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
       
-      const data = await res.json();
-      setForm(prev => ({ ...prev, imageUrl: data.url }));
+      setForm(prev => ({ ...prev, imageUrl: downloadURL }));
     } catch (error) {
       console.error('Error uploading image:', error);
       alert('Failed to upload image. Please try again.');
     } finally {
       setUploadingImage(false);
-      // Reset input
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
@@ -78,7 +104,7 @@ export default function SellPage() {
       <div style={{ textAlign: 'center', padding: '60px 20px' }}>
         <div style={{ fontSize: '4rem', marginBottom: 20 }}>🛒</div>
         <h2 style={{ fontWeight: 800, fontSize: '1.4rem', marginBottom: 10 }}>Enable Selling First</h2>
-        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri', marginBottom: 24 }}>
+        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)', marginBottom: 24 }}>
           বিক্রয় শুরু করতে প্রথমে বিক্রেতা মোড চালু করুন
         </p>
         <button onClick={enableSelling} className="btn btn-primary btn-lg" id="enable-selling-2">Enable Selling Mode</button>
@@ -91,7 +117,7 @@ export default function SellPage() {
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{ textAlign: 'center', padding: '60px 20px' }}>
         <div style={{ fontSize: '4rem', marginBottom: 20 }}>🎉</div>
         <h2 style={{ fontWeight: 800, fontSize: '1.4rem', color: 'var(--color-success)', marginBottom: 10 }}>Book Listed Successfully!</h2>
-        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri', marginBottom: 24 }}>
+        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)', marginBottom: 24 }}>
           আপনার বই সফলভাবে তালিকাভুক্ত হয়েছে! শিক্ষার্থীরা এখন এটি দেখতে পাবেন।
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
@@ -106,7 +132,7 @@ export default function SellPage() {
     <div style={{ maxWidth: 700 }}>
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: 4 }}>List a Book for Sale / বই বিক্রির তালিকা</h1>
-        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri' }}>আপনার পুরনো বই বিক্রির জন্য তালিকাভুক্ত করুন</p>
+        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)' }}>আপনার পুরনো বই বিক্রির জন্য তালিকাভুক্ত করুন</p>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -205,7 +231,9 @@ export default function SellPage() {
           {form.imageUrl ? (
             <div style={{ position: 'relative', width: '100%', maxWidth: 300, margin: '0 auto', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={form.imageUrl} alt="Book Preview" style={{ width: '100%', display: 'block', aspectRatio: '4/3', objectFit: 'cover' }} />
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderRadius: 'var(--radius-lg)' }}>
+              <Image src={form.imageUrl} alt="Book Preview" fill style={{ objectFit: 'cover' }} />
+            </div>
               <button 
                 type="button"
                 onClick={() => setForm({ ...form, imageUrl: '' })}
@@ -223,7 +251,7 @@ export default function SellPage() {
             >
               <Camera size={32} style={{ color: 'var(--color-primary)', marginBottom: 12 }} />
               <p style={{ fontWeight: 600, marginBottom: 4 }}>{uploadingImage ? 'Uploading...' : 'Click to upload photos'}</p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>ছবি আপলোড করুন (JPG, PNG — max 5MB)</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)' }}>ছবি আপলোড করুন (JPG, PNG — max 5MB)</p>
               <button type="button" className="btn btn-glass btn-sm" style={{ marginTop: 12, gap: 8 }} disabled={uploadingImage}>
                 {uploadingImage ? <div className="spinner" style={{ width: 14, height: 14 }} /> : <Upload size={14} />} 
                 {uploadingImage ? 'Uploading' : 'Choose Photos'}

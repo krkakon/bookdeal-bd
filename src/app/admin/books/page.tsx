@@ -2,6 +2,7 @@
 import React from 'react';
 import { MOCK_BOOKS } from '@/data/mockBooks';
 import { Eye, Trash2, CheckCircle } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AdminBooksPage() {
   return (
@@ -23,7 +24,9 @@ export default function AdminBooksPage() {
                 onMouseLeave={e => (e.currentTarget as HTMLTableRowElement).style.background = 'transparent'}>
                 <td style={{ padding: '12px 16px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <img src={book.images[0]} alt={book.title} style={{ width: 40, height: 34, objectFit: 'cover', borderRadius: 6, flexShrink: 0 }} />
+                    <div style={{ position: 'relative', width: 40, height: 34, flexShrink: 0 }}>
+                      <Image src={book.images[0]} alt={book.title} fill style={{ objectFit: 'cover', borderRadius: 6 }} />
+                    </div>
                     <div>
                       <div style={{ fontWeight: 600, color: 'var(--color-text)', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{book.title}</div>
                       <div style={{ fontSize: '0.72rem', color: 'var(--color-text-dim)' }}>{book.level}</div>

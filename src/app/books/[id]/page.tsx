@@ -6,21 +6,50 @@ import { motion } from 'framer-motion';
 import { Heart, ShoppingCart, MessageCircle, Star, MapPin, Eye, ChevronRight, CheckCircle, Shield, Truck, RefreshCw } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { MOCK_BOOKS } from '@/data/mockBooks';
+import { Book } from '@/data/mockBooks';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import Image from 'next/image';
 
 export default function BookDetailPage() {
   const params = useParams();
-  const book = MOCK_BOOKS.find(b => b.id === params.id);
+  const [book, setBook] = React.useState<Book | null>(null);
+  const [loading, setLoading] = React.useState(true);
   const { addItem, items } = useCart();
   const { user } = useAuth();
   const [activeImg, setActiveImg] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMsg, setChatMsg] = useState('');
-  const [messages, setMessages] = useState([
-    { from: 'seller', text: `Hi! I'm selling "${book?.title}". Feel free to ask any questions!`, time: 'Now' },
-  ]);
+  const [messages, setMessages] = useState<{from: string, text: string, time: string}[]>([]);
+
+  React.useEffect(() => {
+    async function fetchBook() {
+      if (!params.id) return;
+      setLoading(true);
+      try {
+        const docRef = doc(db, 'books', params.id as string);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = { id: docSnap.id, ...docSnap.data() } as Book;
+          setBook(data);
+          setMessages([
+            { from: 'seller', text: `Hi! I'm selling "${data.title}". Feel free to ask any questions!`, time: 'Now' },
+          ]);
+        }
+      } catch (err) {
+        console.error('Error fetching book:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBook();
+  }, [params.id]);
+
+  if (loading) return (
+    <><Navbar /><div style={{ textAlign: 'center', padding: '180px 24px' }}><div className="spinner" style={{ margin: '0 auto' }} /></div><Footer /></>
+  );
 
   if (!book) return (
     <><Navbar /><div style={{ textAlign: 'center', padding: '180px 24px', color: 'var(--color-text-muted)' }}><p style={{ fontSize: '3rem' }}>📚</p><p>Book not found</p><Link href="/books" className="btn btn-primary" style={{ marginTop: 16, display: 'inline-flex' }}>Browse Books</Link></div><Footer /></>
@@ -56,13 +85,19 @@ export default function BookDetailPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
             {/* Left: Images */}
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-              <div className="glass-card" style={{ padding: 16, marginBottom: 12 }}>
-                <img src={book.images[activeImg]} alt={book.title} style={{ width: '100%', borderRadius: 'var(--radius-lg)', maxHeight: 380, objectFit: 'cover' }} />
+              <div className="glass-card" style={{ padding: 16, marginBottom: 12, position: 'relative', height: 400 }}>
+                <Image 
+                  src={book.images[activeImg]} 
+                  alt={book.title} 
+                  fill
+                  style={{ borderRadius: 'var(--radius-lg)', objectFit: 'cover', padding: 16 }}
+                  priority
+                />
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
                 {book.images.map((img, i) => (
-                  <button key={i} onClick={() => setActiveImg(i)} style={{ width: 72, height: 60, borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: `2px solid ${i === activeImg ? 'var(--color-primary)' : 'var(--glass-border)'}`, cursor: 'pointer' }}>
-                    <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button key={i} onClick={() => setActiveImg(i)} style={{ position: 'relative', width: 72, height: 60, borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: `2px solid ${i === activeImg ? 'var(--color-primary)' : 'var(--glass-border)'}`, cursor: 'pointer' }}>
+                    <Image src={img} alt="" fill style={{ objectFit: 'cover' }} />
                   </button>
                 ))}
               </div>

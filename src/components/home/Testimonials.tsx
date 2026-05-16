@@ -39,7 +39,7 @@ export default function Testimonials() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           style={{ textAlign: 'center', marginBottom: 48 }}>
           <h2 className="section-title">What Students Say</h2>
-          <p style={{ fontFamily: 'Hind Siliguri', color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>শিক্ষার্থীরা কি বলছেন</p>
+          <p style={{ fontFamily: 'var(--font-bengali)', color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>শিক্ষার্থীরা কি বলছেন</p>
         </motion.div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
@@ -51,7 +51,7 @@ export default function Testimonials() {
               <div className="glass-card" style={{ padding: 28, height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Quote size={24} style={{ color: AVATARS[i], opacity: 0.5, marginBottom: 16 }} />
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', lineHeight: 1.7, flex: 1, marginBottom: 12 }}>{t.text}</p>
-                <p style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri', lineHeight: 1.6, marginBottom: 20 }}>{t.textBn}</p>
+                <p style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)', lineHeight: 1.6, marginBottom: 20 }}>{t.textBn}</p>
                 <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <div style={{ width: 40, height: 40, borderRadius: '50%', background: `linear-gradient(135deg, ${AVATARS[i]}, ${AVATARS[(i + 1) % 4]})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700 }}>

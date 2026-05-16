@@ -29,7 +29,7 @@ export default function CategoriesSection() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           style={{ textAlign: 'center', marginBottom: 48 }}>
           <h2 className="section-title">Browse by Category</h2>
-          <p style={{ fontFamily: 'Hind Siliguri', color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>বিভাগ অনুযায়ী বই খুঁজুন</p>
+          <p style={{ fontFamily: 'var(--font-bengali)', color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>বিভাগ অনুযায়ী বই খুঁজুন</p>
         </motion.div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 16 }}>
@@ -44,7 +44,7 @@ export default function CategoriesSection() {
                     {icons[cat.id]}
                   </div>
                   <div style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--color-text)', marginBottom: 4 }}>{cat.label}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>{cat.bengali}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)' }}>{cat.bengali}</div>
                 </div>
               </Link>
             </motion.div>

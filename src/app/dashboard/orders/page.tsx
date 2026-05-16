@@ -19,7 +19,7 @@ export default function OrdersPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div>
         <h1 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: 4 }}>My Orders / আমার অর্ডার</h1>
-        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri' }}>আপনার সব অর্ডার ট্র্যাক করুন</p>
+        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)' }}>আপনার সব অর্ডার ট্র্যাক করুন</p>
       </div>
 
       {ORDERS.map((order, i) => (
@@ -74,7 +74,7 @@ export default function OrdersPage() {
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-success)', boxShadow: '0 0 8px rgba(16,185,129,0.6)', flexShrink: 0 }} />
                   <div>
                     <p style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-text)' }}>{order.location}</p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>বর্তমান অবস্থান আপডেট</p>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)' }}>বর্তমান অবস্থান আপডেট</p>
                   </div>
                   <Clock size={14} style={{ marginLeft: 'auto', color: 'var(--color-text-dim)' }} />
                 </div>

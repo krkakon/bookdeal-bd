@@ -93,7 +93,7 @@ export function CustomSelect({ value, onChange, options, placeholder, label, req
                   onMouseLeave={e => { if (value !== opt.value) e.currentTarget.style.background = 'transparent'; }}
                 >
                   <span>{opt.label}</span>
-                  {opt.bengali && <span style={{ fontSize: '0.75rem', opacity: 0.6, fontFamily: 'Hind Siliguri' }}>{opt.bengali}</span>}
+                  {opt.bengali && <span style={{ fontSize: '0.75rem', opacity: 0.6, fontFamily: 'var(--font-bengali)' }}>{opt.bengali}</span>}
                 </div>
               ))}
             </motion.div>

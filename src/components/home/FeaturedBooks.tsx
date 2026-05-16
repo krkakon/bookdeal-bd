@@ -2,9 +2,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { Heart, MapPin, Star, Eye } from 'lucide-react';
-import { MOCK_BOOKS, Book } from '@/data/mockBooks';
+import { Book } from '@/data/mockBooks';
 import { useCart } from '@/context/CartContext';
+import { useBooks } from '@/lib/hooks/useBooks';
 
 function BookCard({ book }: { book: Book }) {
   const { addItem } = useCart();
@@ -23,8 +25,16 @@ function BookCard({ book }: { book: Book }) {
         {/* Image */}
         <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0' }}>
           <Link href={`/books/${book.id}`}>
-            <img src={book.images[0]} alt={book.title} className="book-card-img" loading="lazy"
-              style={{ height: 190, objectFit: 'cover', width: '100%' }} />
+            <div style={{ position: 'relative', height: 190, width: '100%' }}>
+              <Image 
+                src={book.images[0]} 
+                alt={book.title} 
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="book-card-img"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
           </Link>
           {/* Discount badge */}
           {discount > 0 && (
@@ -104,7 +114,19 @@ function BookCard({ book }: { book: Book }) {
 }
 
 export default function FeaturedBooks() {
-  const featured = MOCK_BOOKS.filter(b => b.featured).slice(0, 8);
+  const { books: featured, loading } = useBooks({ featured: true, limitCount: 8 });
+
+  if (loading) {
+    return (
+      <section className="section" style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <div className="container" style={{ textAlign: 'center', padding: '40px 0' }}>
+          <div className="spinner" style={{ margin: '0 auto' }} />
+        </div>
+      </section>
+    );
+  }
+
+  if (featured.length === 0) return null;
 
   return (
     <section className="section" style={{ background: 'rgba(255,255,255,0.02)' }}>
@@ -113,7 +135,7 @@ export default function FeaturedBooks() {
           style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40, flexWrap: 'wrap', gap: 16 }}>
           <div>
             <h2 className="section-title">Featured Books</h2>
-            <p className="section-subtitle" style={{ fontFamily: 'Hind Siliguri' }}>বিশেষ বাছাই করা বই — সেরা দামে</p>
+            <p className="section-subtitle" style={{ fontFamily: 'var(--font-bengali)' }}>বিশেষ বাছাই করা বই — সেরা দামে</p>
           </div>
           <Link href="/books" className="btn btn-outline">View All Books →</Link>
         </motion.div>

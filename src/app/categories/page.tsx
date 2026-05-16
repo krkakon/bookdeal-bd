@@ -18,7 +18,7 @@ export default function CategoriesPage() {
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', marginBottom: 48 }}>
             <h1 className="section-title">All Categories / সব বিভাগ</h1>
-            <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri', fontSize: '1.1rem' }}>আপনার পছন্দের বিভাগ বেছে নিন</p>
+            <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)', fontSize: '1.1rem' }}>আপনার পছন্দের বিভাগ বেছে নিন</p>
           </motion.div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
             {BOOK_CATEGORIES.map((cat, i) => (
@@ -28,7 +28,7 @@ export default function CategoriesPage() {
                     <div style={{ width: 64, height: 64, borderRadius: 16, background: GRADIENTS[cat.id], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', flexShrink: 0 }}>{ICONS[cat.id]}</div>
                     <div>
                       <div style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--color-text)', marginBottom: 2 }}>{cat.label}</div>
-                      <div style={{ fontSize: '0.875rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri', marginBottom: 6 }}>{cat.bengali}</div>
+                      <div style={{ fontSize: '0.875rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)', marginBottom: 6 }}>{cat.bengali}</div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{(COUNTS[cat.id] || 0).toLocaleString()} books available</div>
                     </div>
                   </div>

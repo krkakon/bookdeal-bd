@@ -12,6 +12,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { useSite } from '@/context/SiteContext';
 
+
 const NAV_LINKS = [
   { href: '/', label: 'Home', bengali: 'হোম' },
   {
@@ -111,7 +112,7 @@ export default function Navbar() {
                     <span style={{ color: 'var(--color-primary)' }}>Book</span>Deal
                     <span style={{ color: 'var(--color-accent)', marginLeft: 2 }}>BD</span>
                   </div>
-                  <div style={{ fontSize: '0.65rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri, sans-serif' }}>
+                  <div style={{ fontSize: '0.65rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali), sans-serif' }}>
                     বই কিনুন | বই বেচুন
                   </div>
                 </div>
@@ -172,7 +173,7 @@ export default function Navbar() {
                               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                               <div>
                                 <div style={{ color: 'var(--color-text)', fontWeight: 500, fontSize: '0.875rem' }}>{child.label}</div>
-                                <div style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', fontFamily: 'Hind Siliguri' }}>{child.bengali}</div>
+                                <div style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', fontFamily: 'var(--font-bengali)' }}>{child.bengali}</div>
                               </div>
                               {child.subChildren && <ChevronRight size={14} style={{ color: 'var(--color-text-muted)' }} />}
                             </Link>
@@ -201,7 +202,7 @@ export default function Navbar() {
                                       onMouseEnter={e => (e.currentTarget.style.background = 'rgba(14,165,233,0.1)')}
                                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                                       <span style={{ color: 'var(--color-text)', fontWeight: 500, fontSize: '0.875rem' }}>{sub.label}</span>
-                                      <span style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', fontFamily: 'Hind Siliguri' }}>{sub.bengali}</span>
+                                      <span style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', fontFamily: 'var(--font-bengali)' }}>{sub.bengali}</span>
                                     </Link>
                                   ))}
                                 </motion.div>
@@ -337,7 +338,7 @@ export default function Navbar() {
                     {link.href ? (
                       <Link href={link.href} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 16px', borderRadius: 'var(--radius)', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1rem', fontWeight: 500 }}>
                         <span>{link.label}</span>
-                        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>{link.bengali}</span>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)' }}>{link.bengali}</span>
                       </Link>
                     ) : (
                       <>

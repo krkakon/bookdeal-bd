@@ -57,10 +57,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (docSnap.exists()) {
             setUserProfile(docSnap.data() as UserProfile);
           }
-        } catch {
-          // Firebase not configured - use local fallback
-          const stored = localStorage.getItem(`user_${firebaseUser.uid}`);
-          if (stored) setUserProfile(JSON.parse(stored));
+        } catch (err) {
+          console.error('Error fetching user profile:', err);
         }
       } else {
         setUserProfile(null);
@@ -86,8 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
     try {
       await setDoc(doc(db, 'users', cred.user.uid), profile);
-    } catch {
-      localStorage.setItem(`user_${cred.user.uid}`, JSON.stringify(profile));
+    } catch (err) {
+      console.error('Error creating user profile:', err);
     }
     setUserProfile(profile);
   };
@@ -105,9 +103,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const docSnap = await getDoc(doc(db, 'users', cred.user.uid));
       if (docSnap.exists()) setUserProfile(docSnap.data() as UserProfile);
-    } catch {
-      const stored = localStorage.getItem(`user_${cred.user.uid}`);
-      if (stored) setUserProfile(JSON.parse(stored));
+    } catch (err) {
+      console.error('Error fetching user profile on login:', err);
     }
   };
 
@@ -121,8 +118,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const updated = { ...userProfile, isSeller: true, role: 'seller' as const };
     try {
       await setDoc(doc(db, 'users', user.uid), updated, { merge: true });
-    } catch {
-      localStorage.setItem(`user_${user.uid}`, JSON.stringify(updated));
+    } catch (err) {
+      console.error('Error enabling selling:', err);
     }
     setUserProfile(updated);
   };
@@ -132,8 +129,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const updated = { ...userProfile, ...data };
     try {
       await setDoc(doc(db, 'users', user.uid), updated, { merge: true });
-    } catch {
-      localStorage.setItem(`user_${user.uid}`, JSON.stringify(updated));
+    } catch (err) {
+      console.error('Error updating user profile:', err);
     }
     setUserProfile(updated);
   };

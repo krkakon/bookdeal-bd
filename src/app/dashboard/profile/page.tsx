@@ -26,7 +26,7 @@ export default function ProfilePage() {
   return (
     <div style={{ maxWidth: 640 }}>
       <h1 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: 4 }}>Profile Settings / প্রোফাইল</h1>
-      <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri', marginBottom: 28 }}>আপনার তথ্য আপডেট করুন</p>
+      <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)', marginBottom: 28 }}>আপনার তথ্য আপডেট করুন</p>
 
       {/* Avatar */}
       <div className="glass-card" style={{ padding: 28, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 24 }}>

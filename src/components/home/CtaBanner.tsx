@@ -18,7 +18,7 @@ export default function CtaBanner() {
             <h2 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.4rem)', fontWeight: 800, color: 'var(--color-text)', marginBottom: 12 }}>
               Ready to <span className="gradient-text">Sell Your Books?</span>
             </h2>
-            <p style={{ fontFamily: 'Hind Siliguri', fontSize: '1.1rem', color: 'var(--color-text-muted)', marginBottom: 8 }}>
+            <p style={{ fontFamily: 'var(--font-bengali)', fontSize: '1.1rem', color: 'var(--color-text-muted)', marginBottom: 8 }}>
               আপনার পুরনো বই বিক্রি করুন এবং টাকা উপার্জন করুন
             </p>
             <p style={{ fontSize: '0.95rem', color: 'var(--color-text-muted)', maxWidth: 480, margin: '0 auto 32px', lineHeight: 1.7 }}>

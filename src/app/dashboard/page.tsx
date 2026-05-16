@@ -32,7 +32,7 @@ export default function DashboardPage() {
         <h2 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: 6 }}>
           Welcome, {userProfile?.displayName?.split(' ')[0]}! 👋
         </h2>
-        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri', marginBottom: 16 }}>
+        <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)', marginBottom: 16 }}>
           আপনার BookDeal BD ড্যাশবোর্ডে স্বাগতম
         </p>
         {!userProfile?.isSeller && (
@@ -60,7 +60,7 @@ export default function DashboardPage() {
               </div>
               <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: 4 }}>{s.value}</div>
               <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>{s.label}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>{s.bengali}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)' }}>{s.bengali}</div>
             </div>
           </motion.div>
         ))}
@@ -79,7 +79,7 @@ export default function DashboardPage() {
               <div className="glass-card" style={{ padding: '20px 16px', textAlign: 'center', borderTop: `2px solid ${a.color}40` }}>
                 <div style={{ fontSize: '2rem', marginBottom: 10 }}>{a.icon}</div>
                 <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--color-text)' }}>{a.label}</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>{a.bengali}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)' }}>{a.bengali}</div>
               </div>
             </Link>
           </motion.div>

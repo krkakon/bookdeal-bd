@@ -7,10 +7,12 @@ import { Suspense } from 'react';
 import { Search, Filter, ChevronDown, Heart, Star, Eye, MapPin, X, SlidersHorizontal } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { MOCK_BOOKS, Book } from '@/data/mockBooks';
 import { BD_EDUCATION, BOOK_CATEGORIES, BOOK_CONDITIONS } from '@/lib/constants';
 import { useCart } from '@/context/CartContext';
+import { useBooks } from '@/lib/hooks/useBooks';
+import { Book } from '@/data/mockBooks';
 
+import Image from 'next/image';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 
 function BookCard({ book }: { book: Book }) {
@@ -24,7 +26,16 @@ function BookCard({ book }: { book: Book }) {
       <div className="book-card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         <div style={{ position: 'relative', overflow: 'hidden' }}>
           <Link href={`/books/${book.id}`}>
-            <img src={book.images[0]} alt={book.title} style={{ width: '100%', height: 180, objectFit: 'cover', transition: 'transform 0.4s' }} loading="lazy" />
+            <div style={{ position: 'relative', height: 180, width: '100%' }}>
+              <Image 
+                src={book.images[0]} 
+                alt={book.title} 
+                fill
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                style={{ objectFit: 'cover', transition: 'transform 0.4s' }}
+                loading="lazy" 
+              />
+            </div>
           </Link>
           {discount > 0 && <div style={{ position: 'absolute', top: 10, left: 10 }}><span className="badge badge-success">{discount}% OFF</span></div>}
           <button style={{ position: 'absolute', top: 10, right: 10, width: 32, height: 32, borderRadius: '50%', background: 'rgba(10,15,30,0.8)', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-text-muted)' }}><Heart size={14} /></button>
@@ -92,8 +103,10 @@ function BooksContent() {
     ? Array.from(new Set(Object.values(BD_EDUCATION).flatMap((e: any) => e.subjects)))
     : currentEdu?.subjects || [];
 
+  const { books: allBooks, loading } = useBooks();
+
   const filtered = useMemo(() => {
-    let books = [...MOCK_BOOKS];
+    let books = [...allBooks];
     if (search) books = books.filter(b => b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase()) || b.subject.toLowerCase().includes(search.toLowerCase()));
     if (selectedCategory) books = books.filter(b => b.category === selectedCategory);
     if (selectedLevel) books = books.filter(b => b.level?.toLowerCase().includes(selectedLevel.toLowerCase()));
@@ -104,9 +117,9 @@ function BooksContent() {
     if (sortBy === 'price-asc') books.sort((a, b) => a.price - b.price);
     else if (sortBy === 'price-desc') books.sort((a, b) => b.price - a.price);
     else if (sortBy === 'popular') books.sort((a, b) => b.views - a.views);
-    else books.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    else books.sort((a, b) => new Date(b.createdAt as any).getTime() - new Date(a.createdAt as any).getTime());
     return books;
-  }, [search, selectedCategory, selectedCondition, priceMin, priceMax, sortBy]);
+  }, [allBooks, search, selectedCategory, selectedCondition, priceMin, priceMax, sortBy]);
 
   return (
     <>
@@ -116,7 +129,7 @@ function BooksContent() {
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
             <h1 className="section-title" style={{ marginBottom: 4 }}>Browse Books</h1>
-            <p style={{ color: 'var(--color-text-muted)', fontFamily: 'Hind Siliguri' }}>সব ধরনের বই খুঁজুন — {filtered.length} টি বই পাওয়া গেছে</p>
+            <p style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-bengali)' }}>সব ধরনের বই খুঁজুন — {filtered.length} টি বই পাওয়া গেছে</p>
           </motion.div>
 
           {/* Search + Sort Bar */}
@@ -236,11 +249,16 @@ function BooksContent() {
           )}
 
           {/* Results Grid */}
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '80px 0' }}>
+              <div className="spinner" style={{ margin: '0 auto' }} />
+              <p style={{ marginTop: 16, color: 'var(--color-text-dim)' }}>Loading books...</p>
+            </div>
+          ) : filtered.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--color-text-muted)' }}>
               <p style={{ fontSize: '3rem', marginBottom: 16 }}>📚</p>
               <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: 8 }}>No books found</p>
-              <p style={{ fontFamily: 'Hind Siliguri' }}>কোনো বই পাওয়া যায়নি। অনুসন্ধান পরিবর্তন করুন।</p>
+              <p style={{ fontFamily: 'var(--font-bengali)' }}>কোনো বই পাওয়া যায়নি। অনুসন্ধান পরিবর্তন করুন।</p>
             </div>
           ) : (
             <div className="books-grid">

@@ -44,12 +44,12 @@ export default function Footer() {
                   <span style={{ color: 'var(--color-primary)' }}>Book</span>Deal
                   <span style={{ color: 'var(--color-accent)' }}>BD</span>
                 </div>
-                <div style={{ fontSize: '0.65rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri' }}>বই কিনুন | বই বেচুন</div>
+                <div style={{ fontSize: '0.65rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)' }}>বই কিনুন | বই বেচুন</div>
               </div>
             </Link>
             <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.7, marginBottom: 20 }}>
               {settings.tagline}<br />
-              <span style={{ fontFamily: 'Hind Siliguri', fontSize: '0.82rem', color: 'var(--color-text-dim)' }}>{settings.taglineBengali}</span>
+              <span style={{ fontFamily: 'var(--font-bengali)', fontSize: '0.82rem', color: 'var(--color-text-dim)' }}>{settings.taglineBengali}</span>
             </p>
             {/* Social */}
             <div style={{ display: 'flex', gap: 10 }}>

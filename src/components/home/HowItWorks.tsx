@@ -41,7 +41,7 @@ export default function HowItWorks() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           style={{ textAlign: 'center', marginBottom: 60 }}>
           <h2 className="section-title">How It Works</h2>
-          <p style={{ fontFamily: 'Hind Siliguri', color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>এটি কীভাবে কাজ করে</p>
+          <p style={{ fontFamily: 'var(--font-bengali)', color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>এটি কীভাবে কাজ করে</p>
         </motion.div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24, position: 'relative' }}>
@@ -58,9 +58,9 @@ export default function HowItWorks() {
                   {step.icon}
                 </div>
                 <h3 style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--color-text)', marginBottom: 6 }}>{step.title}</h3>
-                <p style={{ fontFamily: 'Hind Siliguri', fontSize: '0.82rem', color: step.color, marginBottom: 10 }}>{step.titleBn}</p>
+                <p style={{ fontFamily: 'var(--font-bengali)', fontSize: '0.82rem', color: step.color, marginBottom: 10 }}>{step.titleBn}</p>
                 <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: 8 }}>{step.desc}</p>
-                <p style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)', fontFamily: 'Hind Siliguri', lineHeight: 1.6 }}>{step.descBn}</p>
+                <p style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)', fontFamily: 'var(--font-bengali)', lineHeight: 1.6 }}>{step.descBn}</p>
               </div>
               {/* Arrow connector */}
               {i < STEPS.length - 1 && (

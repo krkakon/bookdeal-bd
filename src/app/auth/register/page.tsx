@@ -42,7 +42,7 @@ export default function RegisterPage() {
                 <BookOpen size={28} color="white" />
               </div>
               <h1 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: 6 }}>Create Account</h1>
-              <p style={{ fontFamily: 'Hind Siliguri', color: 'var(--color-text-muted)' }}>নিখরচায় অ্যাকাউন্ট তৈরি করুন</p>
+              <p style={{ fontFamily: 'var(--font-bengali)', color: 'var(--color-text-muted)' }}>নিখরচায় অ্যাকাউন্ট তৈরি করুন</p>
             </div>
 
             {error && (

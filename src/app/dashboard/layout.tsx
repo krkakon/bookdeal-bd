@@ -73,7 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               {item.icon}
               <div>
                 <div style={{ fontSize: '0.875rem', fontWeight: pathname === item.href ? 700 : 500 }}>{item.label}</div>
-                <div style={{ fontSize: '0.7rem', opacity: 0.6, fontFamily: 'Hind Siliguri' }}>{item.bengali}</div>
+                <div style={{ fontSize: '0.7rem', opacity: 0.6, fontFamily: 'var(--font-bengali)' }}>{item.bengali}</div>
               </div>
             </Link>
           ))}
