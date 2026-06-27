@@ -1,8 +1,8 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Search, ArrowRight, Star, Shield, Zap, BookOpen, Users, TrendingUp, ChevronDown } from 'lucide-react';
 import { useSite } from '@/context/SiteContext';
 import { BOOK_CATEGORIES } from '@/lib/constants';
@@ -27,7 +27,25 @@ export default function HeroSection() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchCategory, setSearchCategory] = useState('');
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const ref = useRef(null);
+  const categoryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
+        setIsCategoryOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [categoryRef]);
+
+  const selectedCategoryLabel = searchCategory 
+    ? BOOK_CATEGORIES.find(c => c.id === searchCategory)?.label 
+    : 'All Categories';
   const { scrollYProgress } = useScroll({ target: ref });
   const y = useTransform(scrollYProgress, [0, 1], [0, -80]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
@@ -54,7 +72,7 @@ export default function HeroSection() {
 
       {/* Floating Book Bubbles */}
       {FLOATING_BOOKS.map((book, i) => (
-        <motion.div key={i}
+        <motion.div key={i} className="hidden md:block"
           initial={{ opacity: 0, scale: 0.7 }}
           animate={{ opacity: 1, scale: 1, y: [0, -12, 0] }}
           transition={{ opacity: { delay: book.delay + 0.8, duration: 0.5 }, scale: { delay: book.delay + 0.8 }, y: { duration: 4 + i, repeat: Infinity, ease: 'easeInOut', delay: book.delay } }}
@@ -95,26 +113,147 @@ export default function HeroSection() {
           </motion.p>
 
           {/* Search Bar */}
-          <motion.div variants={itemVariants} style={{ maxWidth: 720, margin: '0 auto 40px' }}>
-            <div className="glass" style={{ padding: '6px', display: 'flex', gap: 8, borderRadius: 'var(--radius-xl)' }}>
+          <motion.div variants={itemVariants} className="w-full px-4 md:px-0" style={{ maxWidth: 720, margin: '0 auto 40px' }}>
+            <div className="glass flex flex-col md:flex-row" style={{ padding: '6px', gap: 8, borderRadius: 'var(--radius-xl)' }}>
               
               {/* Category Dropdown */}
-              <div style={{ position: 'relative', minWidth: '150px' }}>
-                <select
+              <div ref={categoryRef} className="w-full md:w-auto" style={{ position: 'relative', minWidth: '130px', zIndex: 50 }}>
+                <button
+                  type="button"
                   className="input"
-                  style={{ border: 'none', background: 'var(--glass-bg)', borderRadius: 'var(--radius-lg)', cursor: 'pointer', appearance: 'none', paddingRight: '32px' }}
-                  value={searchCategory}
-                  onChange={(e) => setSearchCategory(e.target.value)}
+                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                  style={{ 
+                    width: '100%',
+                    border: 'none', 
+                    background: 'var(--glass-bg)', 
+                    borderRadius: 'var(--radius-lg)', 
+                    cursor: 'pointer', 
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0 16px',
+                    height: '100%',
+                    minHeight: '48px',
+                    color: 'var(--color-text)',
+                    textAlign: 'left',
+                    outline: 'none'
+                  }}
                 >
-                  <option value="">All Categories</option>
-                  {BOOK_CATEGORIES.map((cat) => (
-                    <option key={cat.id} value={cat.id}>{cat.label}</option>
-                  ))}
-                </select>
-                <ChevronDown size={16} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-dim)', pointerEvents: 'none' }} />
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {selectedCategoryLabel}
+                  </span>
+                  <ChevronDown 
+                    size={16} 
+                    style={{ 
+                      color: 'var(--color-text-dim)',
+                      transform: isCategoryOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s ease',
+                      flexShrink: 0,
+                      marginLeft: '8px'
+                    }} 
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {isCategoryOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      style={{
+                        position: 'absolute',
+                        top: 'calc(100% + 8px)',
+                        left: 0,
+                        width: '100%',
+                        minWidth: '220px',
+                        background: 'rgba(15, 20, 30, 0.95)',
+                        backdropFilter: 'blur(16px)',
+                        border: '1px solid var(--glass-border)',
+                        borderRadius: 'var(--radius-lg)',
+                        padding: '8px',
+                        boxShadow: '0 10px 40px -10px rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px',
+                        maxHeight: '320px',
+                        overflowY: 'auto'
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearchCategory('');
+                          setIsCategoryOpen(false);
+                        }}
+                        style={{
+                          padding: '10px 14px',
+                          textAlign: 'left',
+                          background: searchCategory === '' ? 'rgba(255,255,255,0.08)' : 'transparent',
+                          color: searchCategory === '' ? 'var(--color-primary)' : 'var(--color-text)',
+                          border: 'none',
+                          borderRadius: 'var(--radius-md)',
+                          cursor: 'pointer',
+                          fontSize: '0.9rem',
+                          fontWeight: searchCategory === '' ? 600 : 400,
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (searchCategory !== '') e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                        }}
+                        onMouseLeave={(e) => {
+                          if (searchCategory !== '') e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        All Categories
+                        {searchCategory === '' && <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--color-primary)' }} />}
+                      </button>
+                      
+                      <div style={{ height: 1, background: 'var(--glass-border)', margin: '4px 0' }} />
+
+                      {BOOK_CATEGORIES.map((cat) => (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => {
+                            setSearchCategory(cat.id);
+                            setIsCategoryOpen(false);
+                          }}
+                          style={{
+                            padding: '10px 14px',
+                            textAlign: 'left',
+                            background: searchCategory === cat.id ? 'rgba(255,255,255,0.08)' : 'transparent',
+                            color: searchCategory === cat.id ? 'var(--color-primary)' : 'var(--color-text)',
+                            border: 'none',
+                            borderRadius: 'var(--radius-md)',
+                            cursor: 'pointer',
+                            fontSize: '0.9rem',
+                            fontWeight: searchCategory === cat.id ? 600 : 400,
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (searchCategory !== cat.id) e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                          }}
+                          onMouseLeave={(e) => {
+                            if (searchCategory !== cat.id) e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
+                          {cat.label}
+                          {searchCategory === cat.id && <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--color-primary)' }} />}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              <div style={{ flex: 1, position: 'relative' }}>
+              <div className="w-full" style={{ flex: 1, position: 'relative' }}>
                 <Search size={18} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-dim)' }} />
                 <input
                   className="input"
@@ -130,7 +269,7 @@ export default function HeroSection() {
                   }}
                 />
               </div>
-              <Link href={`/books?search=${encodeURIComponent(searchQuery)}${searchCategory ? `&category=${searchCategory}` : ''}`} className="btn btn-primary" style={{ borderRadius: 'var(--radius-lg)', gap: 8, flexShrink: 0 }}>
+              <Link href={`/books?search=${encodeURIComponent(searchQuery)}${searchCategory ? `&category=${searchCategory}` : ''}`} className="btn btn-primary w-full md:w-auto" style={{ borderRadius: 'var(--radius-lg)', gap: 8, flexShrink: 0, justifyContent: 'center' }}>
                 Search <ArrowRight size={16} />
               </Link>
             </div>

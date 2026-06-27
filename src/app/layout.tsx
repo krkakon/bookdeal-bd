@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Hind_Siliguri } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
@@ -17,6 +17,12 @@ const hindSiliguri = Hind_Siliguri({
   display: 'swap',
   variable: '--font-hind',
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export const metadata: Metadata = {
   title: 'BookDeal BD — Buy & Sell Used Books in Bangladesh',

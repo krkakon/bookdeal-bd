@@ -98,17 +98,17 @@ export default function Navbar() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
 
             {/* Logo */}
-            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <motion.div whileHover={{ scale: 1.05 }} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <motion.div whileHover={{ scale: 1.05 }} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <div style={{
-                  width: 40, height: 40, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 36, height: 36, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
                   boxShadow: '0 4px 20px rgba(14,165,233,0.4)',
                 }}>
-                  <BookOpen size={22} color="white" />
+                  <BookOpen size={20} color="white" />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--color-text)', lineHeight: 1 }}>
+                  <div style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--color-text)', lineHeight: 1 }}>
                     <span style={{ color: 'var(--color-primary)' }}>Book</span>Deal
                     <span style={{ color: 'var(--color-accent)', marginLeft: 2 }}>BD</span>
                   </div>
@@ -120,7 +120,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Nav */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }} className="hidden-mobile">
+            <div style={{ alignItems: 'center', gap: '4px' }} className="hidden lg:flex">
               {NAV_LINKS.map((link) => (
                 <div key={link.label} style={{ position: 'relative' }}
                   onMouseEnter={() => link.children && setOpenDropdown(link.label)}
@@ -218,7 +218,7 @@ export default function Navbar() {
             </div>
 
             {/* Right Actions */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               {/* Search */}
               <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                 onClick={() => setSearchOpen(!searchOpen)}
@@ -252,7 +252,7 @@ export default function Navbar() {
                     <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.75rem', fontWeight: 700 }}>
                       {userProfile?.displayName?.[0]?.toUpperCase() || 'U'}
                     </div>
-                    <span className="hidden-mobile">{userProfile?.displayName?.split(' ')[0] || 'User'}</span>
+                    <span className="hidden lg:inline">{userProfile?.displayName?.split(' ')[0] || 'User'}</span>
                     <ChevronDown size={14} />
                   </button>
                   <AnimatePresence>
@@ -295,12 +295,12 @@ export default function Navbar() {
               ) : (
                 <div style={{ display: 'flex', gap: 8 }}>
                   <Link href="/auth/login" className="btn btn-glass btn-sm">Login</Link>
-                  <Link href="/auth/register" className="btn btn-primary btn-sm hidden-mobile">Register</Link>
+                  <Link href="/auth/register" className="btn btn-primary btn-sm hidden lg:inline-flex">Register</Link>
                 </div>
               )}
 
               {/* Mobile Menu Toggle */}
-              <button onClick={() => setMobileOpen(!mobileOpen)} style={{ padding: '8px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: 'var(--color-text)', cursor: 'pointer' }} className="show-mobile">
+              <button onClick={() => setMobileOpen(!mobileOpen)} style={{ padding: '8px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: 'var(--color-text)', cursor: 'pointer' }} className="lg:hidden">
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
@@ -331,7 +331,7 @@ export default function Navbar() {
           {mobileOpen && (
             <motion.div initial={{ opacity: 0, x: '100%' }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: '100%' }}
               transition={{ type: 'spring', damping: 28 }}
-              className="mobile-menu" style={{ paddingTop: 80 }}>
+              className="mobile-menu" style={{ paddingTop: 80, overflowY: 'auto' }}>
               <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {NAV_LINKS.map(link => (
                   <div key={link.label}>
@@ -377,12 +377,6 @@ export default function Navbar() {
           )}
         </AnimatePresence>
       </nav>
-
-      <style jsx>{`
-        @media (max-width: 900px) { .hidden-mobile { display: none !important; } }
-        @media (min-width: 901px) { .show-mobile { display: none !important; } }
-        @media (max-width: 600px) { .hidden-mobile { display: none !important; } }
-      `}</style>
     </>
   );
 }

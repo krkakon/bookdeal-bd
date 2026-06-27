@@ -64,14 +64,13 @@ export default function HowItWorks() {
               </div>
               {/* Arrow connector */}
               {i < STEPS.length - 1 && (
-                <div style={{ position: 'absolute', right: -16, top: '50%', transform: 'translateY(-50%)', zIndex: 10, color: 'var(--color-primary)', display: 'flex' }} className="hidden-mobile">
+                <div style={{ position: 'absolute', right: -16, top: '50%', transform: 'translateY(-50%)', zIndex: 10, color: 'var(--color-primary)' }} className="hidden lg:flex">
                   <ArrowRight size={20} />
                 </div>
               )}
             </motion.div>
           ))}
         </div>
-        <style jsx>{`@media (max-width: 900px) { .hidden-mobile { display: none !important; } }`}</style>
       </div>
     </section>
   );
