@@ -286,10 +286,10 @@ export default function HeroSection() {
 
           {/* CTAs */}
           <motion.div variants={itemVariants} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 64 }}>
-            <Link href="/books" className="btn btn-primary btn-xl" style={{ gap: 10 }}>
+            <Link href="/books" className="btn btn-primary btn-xl w-full sm:w-auto" style={{ gap: 10 }}>
               <BookOpen size={20} /> Browse Books / বই দেখুন
             </Link>
-            <Link href="/auth/register" className="btn btn-glass btn-xl" style={{ gap: 10 }}>
+            <Link href="/auth/register" className="btn btn-glass btn-xl w-full sm:w-auto" style={{ gap: 10 }}>
               Start Selling / বিক্রি শুরু করুন <ArrowRight size={18} />
             </Link>
           </motion.div>
@@ -309,7 +309,7 @@ export default function HeroSection() {
 
           {/* Stats */}
           <motion.div variants={itemVariants}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16, maxWidth: 700, margin: '0 auto' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 16, maxWidth: 700, margin: '0 auto' }}>
               {STATS.map((stat, i) => (
                 <motion.div key={i} whileHover={{ y: -4 }} className="glass" style={{ padding: '20px 16px', textAlign: 'center', borderRadius: 'var(--radius-lg)' }}>
                   <div style={{ color: 'var(--color-primary)', marginBottom: 8, display: 'flex', justifyContent: 'center' }}>{stat.icon}</div>

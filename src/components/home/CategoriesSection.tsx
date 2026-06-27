@@ -32,7 +32,7 @@ export default function CategoriesSection() {
           <p style={{ fontFamily: 'var(--font-bengali)', color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>বিভাগ অনুযায়ী বই খুঁজুন</p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 16 }}>
           {BOOK_CATEGORIES.map((cat, i) => (
             <motion.div key={cat.id}
               initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }}

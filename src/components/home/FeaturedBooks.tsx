@@ -104,7 +104,7 @@ function BookCard({ book }: { book: Book }) {
             <button
               onClick={() => addItem({ bookId: book.id, title: book.title, price: book.price, image: book.images[0], sellerName: book.sellerName, sellerId: book.sellerId, condition: book.condition, quantity: 1 })}
               className="btn btn-primary btn-sm">
-              Add to Cart
+              Add
             </button>
           </div>
         </div>

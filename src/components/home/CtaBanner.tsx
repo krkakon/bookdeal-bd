@@ -25,10 +25,10 @@ export default function CtaBanner() {
               Join 8,500+ students who are buying and selling used books on BookDeal BD. It&apos;s free to register!
             </p>
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/auth/register" className="btn btn-primary btn-xl" style={{ gap: 10 }}>
+              <Link href="/auth/register" className="btn btn-primary btn-xl w-full sm:w-auto" style={{ gap: 10 }}>
                 Get Started Free <ArrowRight size={18} />
               </Link>
-              <Link href="/books" className="btn btn-glass btn-xl">
+              <Link href="/books" className="btn btn-glass btn-xl w-full sm:w-auto">
                 Browse Books
               </Link>
             </div>

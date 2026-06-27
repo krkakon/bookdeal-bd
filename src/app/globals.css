@@ -523,9 +523,11 @@ select option {
 @media (max-width: 768px) {
   .section { padding: 56px 0; }
   .container { padding: 0 16px; }
-  .books-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+  .books-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
   .sidebar { transform: translateX(-100%); }
   .sidebar.mobile-open { transform: translateX(0); }
+  .btn-xl { padding: 14px 24px; font-size: 1rem; }
+  .btn-lg { padding: 12px 20px; font-size: 0.9rem; }
 }
 
 /* ==================== CONDITION COLORS ==================== */
