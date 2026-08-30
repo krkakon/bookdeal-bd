@@ -52,7 +52,7 @@ export default function ProfilePage() {
       <form onSubmit={handleSave}>
         <div className="glass-card" style={{ padding: 28, marginBottom: 20 }}>
           <h3 style={{ fontWeight: 700, marginBottom: 20, color: 'var(--color-primary)', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Personal Information</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="input-label">Full Name / পুরো নাম</label>
               <div style={{ position: 'relative' }}>
@@ -93,7 +93,7 @@ export default function ProfilePage() {
         </button>
       </form>
 
-      <style jsx>{`@media (max-width: 600px) { div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; } }`}</style>
+      {/* Responsive styles handled by Tailwind */}
     </div>
   );
 }

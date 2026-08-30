@@ -76,10 +76,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main */}
-      <div style={{ flex: 1, marginLeft: 260, minHeight: '100vh' }}>
+      <div className="flex-1 min-h-screen ml-0 md:ml-[260px]">
         <div style={{ position: 'sticky', top: 0, zIndex: 40, background: 'rgba(8,12,22,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)' }} className="show-mobile">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)' }} className="md:hidden">
               {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
             <h2 style={{ fontWeight: 700, fontSize: '1.05rem' }}>
@@ -100,13 +100,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {sidebarOpen && <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 49 }} />}
 
-      <style jsx>{`
-        @media (max-width: 768px) {
-          div[style*="margin-left: 260px"] { margin-left: 0 !important; }
-          .show-mobile { display: flex !important; }
-        }
-        @media (min-width: 769px) { .show-mobile { display: none !important; } }
-      `}</style>
+      {/* Responsive styles handled by Tailwind */}
     </div>
   );
 }

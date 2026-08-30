@@ -26,7 +26,7 @@ export default function MessagesPage() {
   return (
     <div>
       <h1 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: 24 }}>Messages / বার্তা</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16, height: '70vh' }}>
+      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-4 h-[70vh]">
         {/* Conversation List */}
         <div className="glass-card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--glass-border)', fontWeight: 700, fontSize: '0.875rem' }}>Conversations</div>
@@ -79,7 +79,7 @@ export default function MessagesPage() {
           </div>
         )}
       </div>
-      <style jsx>{`@media (max-width: 600px) { div[style*="grid-template-columns: 280px 1fr"] { grid-template-columns: 1fr !important; } }`}</style>
+      {/* Responsive styles handled by Tailwind */}
     </div>
   );
 }

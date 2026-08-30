@@ -138,7 +138,7 @@ export default function SellPage() {
       <form onSubmit={handleSubmit}>
         <div className="glass-card" style={{ padding: 28, marginBottom: 20 }}>
           <h3 style={{ fontWeight: 700, marginBottom: 20, color: 'var(--color-primary)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Book Information</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div style={{ gridColumn: '1 / -1' }}>
               <label className="input-label">Book Title / বইয়ের নাম *</label>
               <input className="input" required placeholder="e.g. Physics 1st Paper" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} id="sell-title" />
@@ -194,7 +194,7 @@ export default function SellPage() {
 
         <div className="glass-card" style={{ padding: 28, marginBottom: 20 }}>
           <h3 style={{ fontWeight: 700, marginBottom: 20, color: 'var(--color-primary)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Condition & Price</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <CustomSelect 
                 label="Book Condition / অবস্থা"

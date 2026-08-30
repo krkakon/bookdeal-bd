@@ -69,7 +69,7 @@ export default function CartPage() {
               <Link href="/books" className="btn btn-primary btn-lg">Browse Books</Link>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 32 }}>
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
               {/* Cart Items */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 {items.map((item, i) => (
@@ -175,7 +175,7 @@ export default function CartPage() {
         </div>
       </main>
       <Footer />
-      <style jsx>{`@media (max-width: 900px) { div[style*="grid-template-columns: 1fr 380px"] { grid-template-columns: 1fr !important; } }`}</style>
+      {/* Responsive styles handled by Tailwind */}
     </>
   );
 }
