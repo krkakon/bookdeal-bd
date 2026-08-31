@@ -120,7 +120,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Nav */}
-            <div style={{ alignItems: 'center', gap: '4px' }} className="hidden lg:flex">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }} className="hidden md:flex">
               {NAV_LINKS.map((link) => (
                 <div key={link.label} style={{ position: 'relative' }}
                   onMouseEnter={() => link.children && setOpenDropdown(link.label)}
@@ -252,7 +252,7 @@ export default function Navbar() {
                     <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.75rem', fontWeight: 700 }}>
                       {userProfile?.displayName?.[0]?.toUpperCase() || 'U'}
                     </div>
-                    <span className="hidden lg:inline">{userProfile?.displayName?.split(' ')[0] || 'User'}</span>
+                    <span className="hidden sm:inline">{userProfile?.displayName?.split(' ')[0] || 'User'}</span>
                     <ChevronDown size={14} />
                   </button>
                   <AnimatePresence>
@@ -332,6 +332,9 @@ export default function Navbar() {
             <motion.div initial={{ opacity: 0, x: '100%' }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: '100%' }}
               transition={{ type: 'spring', damping: 28 }}
               className="mobile-menu" style={{ paddingTop: 80, overflowY: 'auto' }}>
+              <button onClick={() => setMobileOpen(false)} style={{ position: 'absolute', top: 20, right: 24, padding: '8px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', color: 'white', cursor: 'pointer' }}>
+                <X size={24} />
+              </button>
               <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {NAV_LINKS.map(link => (
                   <div key={link.label}>
