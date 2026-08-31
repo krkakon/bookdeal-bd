@@ -15,62 +15,7 @@ import { Book } from '@/data/mockBooks';
 import Image from 'next/image';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 
-function BookCard({ book }: { book: Book }) {
-  const { addItem } = useCart();
-  const discount = Math.round(((book.originalPrice - book.price) / book.originalPrice) * 100);
-  const conditionColors: Record<string, string> = { 'like-new': '#34d399', 'very-good': '#60a5fa', 'good': '#fbbf24', 'acceptable': '#f87171' };
-  const conditionLabels: Record<string, string> = { 'like-new': 'Like New', 'very-good': 'Very Good', 'good': 'Good', 'acceptable': 'Acceptable' };
-
-  return (
-    <motion.div whileHover={{ y: -4 }} transition={{ type: 'spring', stiffness: 300 }}>
-      <div className="book-card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ position: 'relative', overflow: 'hidden' }}>
-          <Link href={`/books/${book.id}`}>
-            <div style={{ position: 'relative', height: 180, width: '100%' }}>
-              <Image 
-                src={book.images[0]} 
-                alt={book.title} 
-                fill
-                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                style={{ objectFit: 'cover', transition: 'transform 0.4s' }}
-                loading="lazy" 
-              />
-            </div>
-          </Link>
-          {discount > 0 && <div style={{ position: 'absolute', top: 10, left: 10 }}><span className="badge badge-success">{discount}% OFF</span></div>}
-          <button style={{ position: 'absolute', top: 10, right: 10, width: 32, height: 32, borderRadius: '50%', background: 'rgba(10,15,30,0.8)', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-text-muted)' }}><Heart size={14} /></button>
-        </div>
-        <div style={{ padding: 14, flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontSize: '0.7rem', fontWeight: 700, color: conditionColors[book.condition], background: `${conditionColors[book.condition]}18`, padding: '2px 8px', borderRadius: 999, border: `1px solid ${conditionColors[book.condition]}30` }}>{conditionLabels[book.condition]}</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.7rem', color: 'var(--color-text-dim)' }}><Eye size={10} />{book.views}</div>
-          </div>
-          <Link href={`/books/${book.id}`} style={{ textDecoration: 'none' }}>
-            <h3 style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--color-text)', marginBottom: 3, lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{book.title}</h3>
-          </Link>
-          <p style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)', marginBottom: 8 }}>{book.author}</p>
-          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 10 }}>
-            <span className="badge badge-cyan" style={{ fontSize: '0.65rem', padding: '1px 7px' }}>{book.level}</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-            <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', color: 'white', fontWeight: 700 }}>{book.sellerName[0]}</div>
-            <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>
-              {book.sellerName}
-              <span style={{ color: 'var(--color-text-dim)', marginLeft: 6 }}><MapPin size={8} style={{ display: 'inline' }} /> {book.sellerLocation}</span>
-            </div>
-          </div>
-          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <div className="price-tag" style={{ fontSize: '1.1rem' }}>৳{book.price}</div>
-              <div className="price-original" style={{ fontSize: '0.8rem' }}>৳{book.originalPrice}</div>
-            </div>
-            <button onClick={() => addItem({ bookId: book.id, title: book.title, price: book.price, image: book.images[0], sellerName: book.sellerName, sellerId: book.sellerId, condition: book.condition, quantity: 1 })} className="btn btn-primary btn-sm" style={{ fontSize: '0.75rem', padding: '6px 12px' }}>Add</button>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
+import BookCard from '@/components/ui/BookCard';
 
 function BooksContent() {
   const searchParams = useSearchParams();
