@@ -1,7 +1,8 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, Globe, Camera, Video, Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
+import Image from 'next/image';
+import { Globe, Camera, Video, Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
 import { useSite } from '@/context/SiteContext';
 
 export default function Footer() {
@@ -36,8 +37,8 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ width: 42, height: 42, borderRadius: 10, background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <BookOpen size={22} color="white" />
+              <div style={{ width: 42, height: 42, borderRadius: 10, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Image src="/logo.jpg" alt="BookDeal BD Logo" width={42} height={42} style={{ objectFit: 'cover' }} />
               </div>
               <div>
                 <div style={{ fontWeight: 800, fontSize: '1.2rem' }}>

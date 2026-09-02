@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -101,11 +102,10 @@ export default function Navbar() {
             <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <motion.div whileHover={{ scale: 1.05 }} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <div style={{
-                  width: 36, height: 36, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
+                  width: 36, height: 36, borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: '0 4px 20px rgba(14,165,233,0.4)',
                 }}>
-                  <BookOpen size={20} color="white" />
+                  <Image src="/logo.jpg" alt="BookDeal BD Logo" width={36} height={36} style={{ objectFit: 'cover' }} />
                 </div>
                 <div>
                   <div style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--color-text)', lineHeight: 1 }}>
